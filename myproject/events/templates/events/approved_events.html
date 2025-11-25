@@ -1,0 +1,93 @@
+<!--배포 시 반드시 IP 삭제 할것!!!!!!!!-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>행사 일정 안내</title>
+  <style>
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .poster {
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      font-family: sans-serif;
+    }
+    .poster img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+    }
+    .poster h3 {
+      padding: 10px;
+      font-size: 18px;
+    }
+    /* 모달 스타일*/
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .close {
+      float: right;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">교내 행사 목록</h1>
+  <div class="container">
+    {% for event in events %}
+      <div class="poster" onclick="showModal('{{event.description|escapejs}}')">
+        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+        <h3>{{ event.title }}</h3>
+      </div>
+    {% empty %}
+      <p>아직 승인된 행사가 없습니다.</p>
+    {% endfor %}
+  </div>
+
+  <!--모달 영역-->
+  <div id="modal" class="modal" onclick="hideModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <span class="close" onclick="hideModal()">&times;</span>
+      <p id="modal-text">설명이 들어올 자리</p>
+    </div>
+  </div>
+
+  <script>
+    function showModal(description) {
+      document.getElementById('modal-text').textContent = description;
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function hideModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
